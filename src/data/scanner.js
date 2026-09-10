@@ -254,9 +254,9 @@ public class PaymentService {
     javaCode: `package com.fintech.gateway;
 
 public class StripeGatewayService {
-    // Known Vulnerability: Hardcoded Secrets (CWE-798)
-    private String apiKey = "sk_live_51M0abcdef1234567890XYZSECRETKEY";
-    private String jwtSecret = "super_secret_signing_key_never_share";
+    // Known Vulnerability: Hardcoded Secrets (CWE-798) - Safe demo placeholder for static analysis
+    private String apiKey = "DEMO_MOCK_STRIPE_KEY_SAMPLE_DO_NOT_USE_12345";
+    private String jwtSecret = "DEMO_MOCK_JWT_SECRET_FOR_SCANNER_ONLY";
 
     public void chargeCard(String customerId, double amount) {
         System.out.println("Charging customer " + customerId + " with key: " + apiKey);
