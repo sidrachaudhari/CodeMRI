@@ -202,9 +202,9 @@ export default function ArchitectureGraph({ onSelectModule, onNavigate, isDarkMo
   };
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex gap-4 pb-4">
+    <div className="min-h-[calc(100vh-6rem)] sm:h-[calc(100vh-8rem)] flex flex-col lg:flex-row gap-4 pb-4">
       {/* Graph Area - CLEAN BLUEPRINT CANVAS ALWAYS READABLE */}
-      <div className="flex-1 border-2 border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden relative flex flex-col bg-white dark:bg-neutral-950 shadow-sm">
+      <div className="h-[360px] sm:h-[450px] lg:h-auto flex-1 border-2 border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden relative flex flex-col bg-white dark:bg-neutral-950 shadow-sm shrink-0 lg:shrink">
         {/* Canvas Header */}
         <div className="p-3 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-black flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
@@ -235,7 +235,7 @@ export default function ArchitectureGraph({ onSelectModule, onNavigate, isDarkMo
       </div>
 
       {/* Side Detail Panel */}
-      <Card className="w-80 p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 flex flex-col justify-between shrink-0 overflow-y-auto">
+      <Card className="w-full lg:w-80 p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 flex flex-col justify-between shrink-0 overflow-y-auto">
         {selectedNode ? (
           <div className="space-y-4">
             <div>

@@ -60,17 +60,17 @@ export default function ProjectIngestionModal({ isOpen, onClose, onIngestProject
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <Card className="w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 rounded-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4">
+      <Card className="w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 rounded-2xl">
         {/* Header */}
-        <div className="p-5 border-b flex items-center justify-between border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-black">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl border flex items-center justify-center bg-white border-neutral-200 text-neutral-900 dark:bg-neutral-900 dark:border-neutral-800 dark:text-white">
+        <div className="p-4 sm:p-5 border-b flex items-center justify-between border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-black">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl border flex items-center justify-center bg-white border-neutral-200 text-neutral-900 dark:bg-neutral-900 dark:border-neutral-800 dark:text-white shrink-0">
               <FolderGit2 className="h-4 w-4 text-[#51E2F5]" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-neutral-900 dark:text-white">Select or Upload Repository</h2>
-              <p className="text-xs text-neutral-500">Choose a sample benchmark or provide your own Java files to audit</p>
+              <h2 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">Select or Upload Repository</h2>
+              <p className="text-[11px] sm:text-xs text-neutral-500">Choose a sample benchmark or provide your own Java files to audit</p>
             </div>
           </div>
           <button
@@ -82,7 +82,7 @@ export default function ProjectIngestionModal({ isOpen, onClose, onIngestProject
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b px-5 pt-3 gap-6 text-xs border-neutral-200 dark:border-neutral-800">
+        <div className="flex border-b px-3 sm:px-5 pt-2 sm:pt-3 gap-3 sm:gap-6 text-xs border-neutral-200 dark:border-neutral-800 overflow-x-auto">
           {[
             { id: 'presets', label: 'Sample Testbeds' },
             { id: 'paste', label: 'Paste Code / Manifest' },
@@ -91,7 +91,7 @@ export default function ProjectIngestionModal({ isOpen, onClose, onIngestProject
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-3 font-semibold transition-colors border-b-2 ${
+              className={`pb-2.5 sm:pb-3 font-semibold transition-colors border-b-2 whitespace-nowrap text-xs ${
                 activeTab === tab.id
                   ? 'border-[#51E2F5] text-neutral-900 dark:text-white font-bold'
                   : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white'

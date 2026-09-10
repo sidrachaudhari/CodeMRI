@@ -8,14 +8,14 @@ export default function RefactoringRoadmap({ isDarkMode = true }) {
   return (
     <div className="space-y-6 pb-12">
       {/* Overview Banner */}
-      <Card className="p-5 flex items-center justify-between border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+      <Card className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
         <div>
           <h2 className="text-base font-bold text-neutral-900 dark:text-white">Recommended Action Plan</h2>
           <p className="text-xs mt-0.5 text-neutral-500">
             Prioritized engineering backlog to reduce technical debt, address CVEs, and improve system maintainability
           </p>
         </div>
-        <Badge variant="mauve">
+        <Badge variant="mauve" className="self-start sm:self-auto shrink-0">
           5 Action Items
         </Badge>
       </Card>

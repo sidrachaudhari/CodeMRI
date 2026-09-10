@@ -20,6 +20,7 @@ export default function App() {
   const [isScanning, setIsScanning] = useState(false);
   const [scanStep, setScanStep] = useState(8); // Default complete
   const [isIngestModalOpen, setIsIngestModalOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   // Dynamic Repository State
   const [currentRepo, setCurrentRepo] = useState(REPO_SNAPSHOT);
@@ -92,12 +93,14 @@ export default function App() {
         isDarkMode ? 'dark bg-[#0a0a0c] text-neutral-100' : 'bg-[#f8fafc] text-[#0f172a]'
       }`}
     >
-      {/* Sidebar */}
+      {/* Sidebar (Desktop + Mobile Drawer) */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         repoInfo={currentRepo}
         isDarkMode={isDarkMode}
+        isMobileOpen={isMobileNavOpen}
+        onCloseMobile={() => setIsMobileNavOpen(false)}
       />
 
       {/* Main Content Area */}
@@ -109,10 +112,11 @@ export default function App() {
           onOpenIngest={() => setIsIngestModalOpen(true)}
           isDarkMode={isDarkMode}
           onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+          onOpenMobileMenu={() => setIsMobileNavOpen(true)}
         />
 
         <main
-          className={`flex-1 overflow-y-auto p-6 transition-colors duration-200 ${
+          className={`flex-1 overflow-y-auto p-3 sm:p-6 transition-colors duration-200 ${
             isDarkMode ? 'bg-[#0a0a0c]' : 'bg-[#f8fafc]'
           }`}
         >

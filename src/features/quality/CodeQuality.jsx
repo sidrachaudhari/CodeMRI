@@ -10,16 +10,16 @@ export default function CodeQuality({ onSelectModule, onNavigate, isDarkMode = t
   return (
     <div className="space-y-6 pb-12">
       {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: 'Avg Cyclomatic Complexity', value: '7.8', status: 'Optimal < 10' },
           { label: 'Avg Coupling Ratio', value: '0.42', status: 'Moderate' },
           { label: 'Maintainability Index', value: '76 / 100', status: 'Grade B+' },
           { label: 'Estimated Tech Debt', value: '142 hours', status: 'Remediation backlog' }
         ].map((m) => (
-          <Card key={m.label} className="p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+          <Card key={m.label} className="p-3.5 sm:p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
             <span className="text-xs block mb-1 text-neutral-500">{m.label}</span>
-            <div className="text-2xl font-bold font-mono mb-1 text-neutral-900 dark:text-white">{m.value}</div>
+            <div className="text-xl sm:text-2xl font-bold font-mono mb-1 text-neutral-900 dark:text-white">{m.value}</div>
             <span className="text-[10px] text-neutral-500">{m.status}</span>
           </Card>
         ))}
@@ -27,7 +27,7 @@ export default function CodeQuality({ onSelectModule, onNavigate, isDarkMode = t
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Module Quality Findings Table */}
-        <Card className="lg:col-span-2 p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+        <Card className="lg:col-span-2 p-4 sm:p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Static Code Quality Hotspots</h3>
@@ -35,8 +35,8 @@ export default function CodeQuality({ onSelectModule, onNavigate, isDarkMode = t
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+          <div className="overflow-x-auto -mx-1 sm:mx-0">
+            <table className="w-full text-left text-xs min-w-[520px]">
               <thead>
                 <tr className="border-b border-neutral-200 dark:border-neutral-800 text-neutral-500">
                   <th className="pb-2 font-semibold">Module / File</th>

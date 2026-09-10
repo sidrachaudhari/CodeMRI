@@ -27,7 +27,7 @@ export default function AIDiagnosis({
   return (
     <div className="space-y-6 pb-12">
       {/* Humanized Header */}
-      <Card className="p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 flex items-center justify-between">
+      <Card className="p-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-[#51E2F5]" />
@@ -37,7 +37,7 @@ export default function AIDiagnosis({
             Deterministic code audit connecting AST metrics, architecture dependencies, and security findings
           </p>
         </div>
-        <Badge variant="mauve">
+        <Badge variant="mauve" className="self-start sm:self-auto shrink-0">
           Evidence-Backed Audit
         </Badge>
       </Card>

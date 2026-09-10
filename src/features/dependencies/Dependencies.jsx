@@ -22,7 +22,7 @@ export default function Dependencies({ dependencies = DEPENDENCY_LIST, isDarkMod
   return (
     <div className="space-y-6 pb-12 font-sans">
       {/* Dependency Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[
           {
             label: 'Total Dependencies',
@@ -107,12 +107,12 @@ export default function Dependencies({ dependencies = DEPENDENCY_LIST, isDarkMod
           </div>
 
           {/* Segmented Filter Pills */}
-          <div className="flex items-center bg-neutral-100 dark:bg-neutral-950 p-1 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs">
+          <div className="flex items-center overflow-x-auto max-w-full bg-neutral-100 dark:bg-neutral-950 p-1 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs shrink-0">
             {['ALL', 'VULNERABLE', 'OUTDATED', 'HEALTHY'].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg font-medium transition-all whitespace-nowrap ${
                   filter === f
                     ? 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-xs font-bold'
                     : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
@@ -124,8 +124,8 @@ export default function Dependencies({ dependencies = DEPENDENCY_LIST, isDarkMod
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <div className="overflow-x-auto -mx-2 sm:mx-0">
+          <table className="w-full text-left text-xs min-w-[620px]">
             <thead>
               <tr className="border-b border-neutral-200 dark:border-neutral-800 text-neutral-400 dark:text-neutral-500 text-[11px] uppercase tracking-wider font-semibold">
                 <th className="pb-3 pr-4">Package Identifier</th>

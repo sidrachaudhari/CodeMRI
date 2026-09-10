@@ -30,19 +30,19 @@ export default function Overview({
     <div className="space-y-6 pb-12">
       {/* 9-STAGE AUDIT PIPELINE */}
       <Card className="border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 p-4">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white">
               Repository Audit Pipeline
             </span>
-            <span className="text-xs text-neutral-500">• Standard 9-Step Verification</span>
+            <span className="text-xs text-neutral-500 hidden sm:inline">• Standard 9-Step Verification</span>
           </div>
-          <span className="text-xs font-mono font-medium text-neutral-500">
+          <span className="text-[11px] sm:text-xs font-mono font-medium text-neutral-500">
             {isScanning ? `Running Step ${scanStep + 1} of 9...` : '✓ All 9 Diagnostic Stages Completed'}
           </span>
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-9 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-9 gap-2">
           {PIPELINE_STAGES.map((stage, idx) => {
             const isDone = idx <= scanStep;
             const isCurrent = idx === scanStep && isScanning;

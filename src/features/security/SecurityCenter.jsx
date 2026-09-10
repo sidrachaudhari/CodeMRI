@@ -17,8 +17,8 @@ export default function SecurityCenter({
   return (
     <div className="space-y-6 pb-12 font-sans">
       {/* Top Banner */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="p-5 flex flex-col justify-between border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        <Card className="col-span-2 sm:col-span-1 p-4 sm:p-5 flex flex-col justify-between border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
           <div>
             <span className="text-xs block mb-1 text-neutral-500">Security Score</span>
             <div className="text-3xl font-extrabold text-neutral-900 dark:text-white">
