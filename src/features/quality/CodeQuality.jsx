@@ -30,8 +30,8 @@ export default function CodeQuality({ onSelectModule, onNavigate, isDarkMode = t
         <Card className="lg:col-span-2 p-4 sm:p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Static Code Quality Hotspots</h3>
-              <p className="text-xs text-neutral-500">AST metrics mapped to maintainability risks</p>
+              <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Code Quality Hotspots</h3>
+              <p className="text-xs text-neutral-500">Code complexity and structural maintainability</p>
             </div>
           </div>
 
@@ -43,7 +43,7 @@ export default function CodeQuality({ onSelectModule, onNavigate, isDarkMode = t
                   <th className="pb-2 font-semibold">Complexity</th>
                   <th className="pb-2 font-semibold">Coupling</th>
                   <th className="pb-2 font-semibold">Tech Debt</th>
-                  <th className="pb-2 font-semibold">Risk</th>
+                  <th className="pb-2 font-semibold">Risk Score</th>
                   <th className="pb-2 font-semibold text-right">Details</th>
                 </tr>
               </thead>
@@ -66,9 +66,9 @@ export default function CodeQuality({ onSelectModule, onNavigate, isDarkMode = t
                     </td>
                     <td className="py-3 font-mono text-neutral-500">{mod.techDebt}</td>
                     <td className="py-3">
-                      <Badge variant={mod.riskScore > 80 ? 'coral' : mod.riskScore > 50 ? 'secondary' : 'pebble'} className="font-mono">
-                        {mod.riskScore}
-                      </Badge>
+                      <span className={`font-mono text-xs font-bold ${mod.riskScore > 80 ? 'text-[#FFA8B6]' : mod.riskScore > 50 ? 'text-[#51E2F5]' : 'text-neutral-400'}`}>
+                        {mod.riskScore}/100
+                      </span>
                     </td>
                     <td className="py-3 text-right">
                       <Button

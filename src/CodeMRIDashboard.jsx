@@ -306,9 +306,9 @@ export default function CodeMRIDashboard() {
                       <h2 className="text-xs uppercase tracking-wider font-mono text-cyan-400">Diagnostic Verdict</h2>
                       <p className="text-lg font-bold text-white mt-1">SOFTWARE HEALTH SCORE</p>
                     </div>
-                    <span className="px-2.5 py-1 text-xs font-mono rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    {/* <span className="px-2.5 py-1 text-xs font-mono rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                       GOOD — IMPROVEMENTS RECOMMENDED
-                    </span>
+                    </span> */}
                   </div>
 
                   {/* Radial / Score Center */}

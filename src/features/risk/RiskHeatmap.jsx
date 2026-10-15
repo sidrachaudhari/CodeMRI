@@ -27,7 +27,7 @@ export default function RiskHeatmap({ onSelectModule, onNavigate, isDarkMode = t
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Repository Risk Matrix</h3>
-              <p className="text-xs text-neutral-500">Intensity mapped to composite complexity, coupling & security</p>
+              <p className="text-xs text-neutral-500">Visual breakdown of module vulnerability and structural risk</p>
             </div>
             <div className="flex items-center gap-3 text-[10px] text-neutral-500">
               <span className="flex items-center gap-1.5">

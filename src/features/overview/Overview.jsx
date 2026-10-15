@@ -28,17 +28,14 @@ export default function Overview({
 }) {
   return (
     <div className="space-y-6 pb-12">
-      {/* 9-STAGE AUDIT PIPELINE */}
+      {/* REPOSITORY AUDIT PIPELINE */}
       <Card className="border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 p-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white">
-              Repository Audit Pipeline
-            </span>
-            <span className="text-xs text-neutral-500 hidden sm:inline">• Standard 9-Step Verification</span>
-          </div>
+          <span className="text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white">
+            Repository Audit Pipeline
+          </span>
           <span className="text-[11px] sm:text-xs font-mono font-medium text-neutral-500">
-            {isScanning ? `Running Step ${scanStep + 1} of 9...` : '✓ All 9 Diagnostic Stages Completed'}
+            {isScanning ? `Running Step ${scanStep + 1} of 9...` : '✓ All 9 Stages Completed'}
           </span>
         </div>
 
@@ -62,7 +59,7 @@ export default function Overview({
                   {isDone && !isCurrent ? (
                     <CheckCircle2 className="h-3 w-3 text-[#51E2F5]" />
                   ) : isCurrent ? (
-                    <span className="h-2 w-2 rounded-full bg-[#1B1618] animate-ping" />
+                    <span className="h-2 w-2 rounded-full bg-[#1B1618]" />
                   ) : null}
                 </div>
                 <div className="text-[11px] font-medium leading-tight truncate">{stage.name}</div>
@@ -81,9 +78,9 @@ export default function Overview({
               <span className="text-xs uppercase tracking-wider font-semibold text-neutral-500">
                 Overall Repository Health
               </span>
-              <Badge variant="default">
+              <span className="text-xs font-semibold text-[#51E2F5]">
                 {healthScore.status}
-              </Badge>
+              </span>
             </div>
 
             <h2 className="text-sm font-bold mb-4 text-neutral-900 dark:text-white">
@@ -151,12 +148,12 @@ export default function Overview({
         <div className="lg:col-span-2 space-y-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
-              { label: 'Files Analyzed', value: repoSnapshot.filesAnalyzed, icon: FileCode2, note: 'Scanned AST tokens' },
-              { label: 'Lines of Code', value: repoSnapshot.loc, icon: Layers, note: 'Active Java codebase' },
-              { label: 'Modules Mapped', value: repoSnapshot.modulesCount, icon: Box, note: 'Service components' },
-              { label: 'Dependencies', value: repoSnapshot.dependenciesCount, icon: Zap, note: 'Resolved packages' },
-              { label: 'Issues Detected', value: repoSnapshot.issuesDetected, icon: AlertTriangle, note: 'Smells & warnings' },
-              { label: 'Technical Debt', value: `${repoSnapshot.techDebtHours}h`, icon: Clock, note: 'Remediation backlog' }
+              { label: 'Files Analyzed', value: repoSnapshot.filesAnalyzed, icon: FileCode2 },
+              { label: 'Lines of Code', value: repoSnapshot.loc, icon: Layers },
+              { label: 'Modules Mapped', value: repoSnapshot.modulesCount, icon: Box },
+              { label: 'Dependencies', value: repoSnapshot.dependenciesCount, icon: Zap },
+              { label: 'Issues Detected', value: repoSnapshot.issuesDetected, icon: AlertTriangle },
+              { label: 'Technical Debt', value: `${repoSnapshot.techDebtHours}h`, icon: Clock }
             ].map((card) => {
               const Icon = card.icon;
               return (
@@ -168,22 +165,19 @@ export default function Overview({
                   <div className="text-2xl font-bold tracking-tight font-mono text-neutral-900 dark:text-white">
                     {card.value}
                   </div>
-                  <span className="text-[11px] mt-1 text-neutral-500">{card.note}</span>
                 </Card>
               );
             })}
           </div>
 
-          {/* WHAT SHOULD THE DEVELOPER FIX FIRST? */}
+          {/* WHAT SHOULD BE FIXED FIRST */}
           <Card className="p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500">
-                  Immediate Action
-                </span>
                 <h3 className="text-sm font-bold text-neutral-900 dark:text-white">
-                  What Should You Fix First?
+                  Top Priority Fixes
                 </h3>
+                <p className="text-xs text-neutral-500">Critical risks requiring immediate attention</p>
               </div>
               <Button
                 variant="ghost"
@@ -191,15 +185,15 @@ export default function Overview({
                 onClick={() => onNavigate('roadmap')}
                 className="text-xs text-[#51E2F5] hover:text-neutral-900 dark:hover:text-white gap-1"
               >
-                View Roadmap <ChevronRight className="h-3 w-3" />
+                Action Plan <ChevronRight className="h-3 w-3" />
               </Button>
             </div>
 
             <div className="space-y-2.5">
               {[
-                { priority: 'P0 — Critical', title: 'Patch Log4j JNDI Vulnerability (CVE-2021-44228)', module: 'PaymentService.java', effort: '2h effort', why: 'Eliminates unauthenticated Remote Code Execution risk.' },
-                { priority: 'P1 — High', title: 'Decouple PaymentService from OrderController', module: 'OrderController.java', effort: '12h effort', why: 'Breaks single point of failure so checkout survives payment delays.' },
-                { priority: 'P1 — High', title: 'Parameterize native SQL queries in UserRepository', module: 'UserRepository.java', effort: '4h effort', why: 'Eliminates SQL injection vector (CWE-89) in search methods.' }
+                { priority: 'Critical', title: 'Patch Outdated Log4j Library (CVE-2021-44228)', module: 'PaymentService.java', effort: '2h effort', why: 'Stops remote attackers from executing malware and taking over the server.' },
+                { priority: 'High', title: 'Decouple Payment Processing from Checkout', module: 'OrderController.java', effort: '12h effort', why: 'Prevents third-party payment delays from freezing the entire shopping cart.' },
+                { priority: 'High', title: 'Secure Database Queries in User Search', module: 'UserRepository.java', effort: '4h effort', why: 'Blocks SQL injection to prevent malicious visitors from stealing customer records.' }
               ].map((item, idx) => (
                 <div
                   key={idx}
@@ -207,9 +201,9 @@ export default function Overview({
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={idx === 0 ? 'coral' : 'secondary'}>
+                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${idx === 0 ? 'bg-[#FFA8B6]/20 text-[#FFA8B6]' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300'}`}>
                         {item.priority}
-                      </Badge>
+                      </span>
                       <span className="text-xs font-bold text-neutral-900 dark:text-white">
                         {item.title}
                       </span>
@@ -219,9 +213,7 @@ export default function Overview({
 
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-center text-xs">
                     <span className="font-mono text-[11px] text-neutral-500">{item.module}</span>
-                    <Badge variant="pebble" className="font-mono text-[10px]">
-                      {item.effort}
-                    </Badge>
+                    <span className="font-mono text-[11px] text-neutral-400">({item.effort})</span>
                   </div>
                 </div>
               ))}
@@ -234,12 +226,10 @@ export default function Overview({
       <Card className="p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <span className="text-[11px] uppercase tracking-wider font-semibold text-neutral-500">
-              Hotspot Breakdown
-            </span>
             <h3 className="text-sm font-bold text-neutral-900 dark:text-white">
-              Where Are The Biggest Risks & Why Are They Risky?
+              Highest Risk Modules
             </h3>
+            <p className="text-xs text-neutral-500">Components most vulnerable to security leaks or service outages</p>
           </div>
           <Button
             variant="ghost"
@@ -262,25 +252,25 @@ export default function Overview({
                   <span className="text-xs font-bold font-mono truncate text-neutral-900 dark:text-white">
                     {mod.name}
                   </span>
-                  <Badge variant={mod.riskScore > 80 ? 'coral' : 'secondary'} className="font-mono">
+                  <span className={`text-xs font-mono font-bold ${mod.riskScore > 80 ? 'text-[#FFA8B6]' : 'text-neutral-500'}`}>
                     Risk: {mod.riskScore}/100
-                  </Badge>
+                  </span>
                 </div>
 
                 <div className="text-[11px] mb-3 space-y-1 text-neutral-500">
-                  <div>Category: <strong className="text-neutral-900 dark:text-neutral-200">{mod.category}</strong></div>
-                  <div>Cyclomatic Complexity: <strong className="font-mono text-neutral-900 dark:text-white">{mod.complexity}</strong> (Target &lt;10)</div>
-                  <div>Coupling Ratio: <strong className="font-mono text-neutral-900 dark:text-white">{mod.coupling}</strong> • {mod.dependents} callers</div>
+                  <div>Area: <strong className="text-neutral-900 dark:text-neutral-200">{mod.category}</strong></div>
+                  <div>Complexity: <strong className="font-mono text-neutral-900 dark:text-white">{mod.complexity} branches</strong></div>
+                  <div>Connected services: <strong className="font-mono text-neutral-900 dark:text-white">{mod.dependents} callers</strong></div>
                 </div>
 
                 <div className="p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs leading-relaxed bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200">
-                  <span className="font-bold block mb-0.5 text-neutral-900 dark:text-white">Why it's risky:</span>
+                  <span className="font-bold block mb-0.5 text-neutral-900 dark:text-white">Why it matters:</span>
                   {mod.diagnosis}
                 </div>
               </div>
 
               <div className="pt-3 mt-3 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
-                <span className="text-[11px] text-neutral-500">Remediation: {mod.techDebt}</span>
+                <span className="text-[11px] text-neutral-500">Est. fix time: {mod.techDebt}</span>
                 <Button
                   variant="outline"
                   size="sm"
@@ -290,7 +280,7 @@ export default function Overview({
                   }}
                   className="text-xs gap-1 border-[#51E2F5] text-[#51E2F5] hover:bg-[#51E2F5] hover:text-[#1B1618]"
                 >
-                  Diagnose <ArrowUpRight className="h-3 w-3" />
+                  Review <ArrowUpRight className="h-3 w-3" />
                 </Button>
               </div>
             </div>

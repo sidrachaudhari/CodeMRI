@@ -12,12 +12,9 @@ export default function RefactoringRoadmap({ isDarkMode = true }) {
         <div>
           <h2 className="text-base font-bold text-neutral-900 dark:text-white">Recommended Action Plan</h2>
           <p className="text-xs mt-0.5 text-neutral-500">
-            Prioritized engineering backlog to reduce technical debt, address CVEs, and improve system maintainability
+            Ordered remediation steps to eliminate security risks and stabilize codebase
           </p>
         </div>
-        <Badge variant="mauve" className="self-start sm:self-auto shrink-0">
-          5 Action Items
-        </Badge>
       </Card>
 
       {/* Roadmap List */}
@@ -28,12 +25,13 @@ export default function RefactoringRoadmap({ isDarkMode = true }) {
             className="p-5 border transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 hover:border-[#51E2F5] dark:hover:border-[#51E2F5]"
           >
             <div className="flex items-start gap-4">
-              <Badge
-                variant={item.priority === 'P0' ? 'coral' : item.priority === 'P1' ? 'secondary' : 'pebble'}
-                className="shrink-0 mt-0.5"
+              <span
+                className={`text-xs font-bold px-2 py-0.5 rounded-md shrink-0 mt-0.5 ${
+                  item.priority === 'P0' ? 'bg-[#FFA8B6]/20 text-[#FFA8B6]' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
+                }`}
               >
                 {item.priority}
-              </Badge>
+              </span>
               <div>
                 <h4 className="text-sm font-bold mb-1.5 text-neutral-900 dark:text-white">
                   {item.title}
@@ -44,21 +42,19 @@ export default function RefactoringRoadmap({ isDarkMode = true }) {
                   <span>Category: {item.category}</span>
                   <span>•</span>
                   <span className="flex items-center gap-1 font-medium">
-                    <Clock className="h-3.5 w-3.5" /> Estimated effort: {item.effort}
+                    <Clock className="h-3.5 w-3.5" /> Est. effort: {item.effort}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="flex items-center gap-3 self-end md:self-center text-xs">
-              <Badge
-                variant={item.impact === 'CRITICAL' ? 'coral' : 'slate'}
-              >
+              <span className={`text-xs font-bold ${item.impact === 'CRITICAL' ? 'text-[#FFA8B6]' : 'text-neutral-400'}`}>
                 Impact: {item.impact}
-              </Badge>
-              <Badge variant="outline">
+              </span>
+              <span className="text-xs text-neutral-500 font-medium">
                 {item.status}
-              </Badge>
+              </span>
             </div>
           </Card>
         ))}

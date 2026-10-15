@@ -10,14 +10,26 @@
     <description>Demo project with known vulnerabilities for CodeMRI testing</description>
 
     <dependencies>
-        <!-- VULNERABLE DEPENDENCY: Log4Shell (CVE-2021-44228) -->
+        <!-- 
+            SUPPLY-CHAIN RISK 1: Log4Shell (CVE-2021-44228)
+            - What it is: Outdated logging utility (version 2.14.1).
+            - Danger in Plain English: Allows remote hackers to execute arbitrary code
+              and take total control of the company server over the internet.
+            - Required Action: Upgrade to version 2.17.1 or higher.
+        -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.14.1</version>
         </dependency>
 
-        <!-- VULNERABLE DEPENDENCY: Polymorphic Deserialization (CVE-2020-25649) -->
+        <!-- 
+            SUPPLY-CHAIN RISK 2: Unsafe Data Deserialization (CVE-2020-25649)
+            - What it is: Outdated JSON conversion library (version 2.9.10).
+            - Danger in Plain English: Allows attackers to send corrupted data packets
+              that trigger unintended commands inside the application.
+            - Required Action: Upgrade to version 2.14 or higher.
+        -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

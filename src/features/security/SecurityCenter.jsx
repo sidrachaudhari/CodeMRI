@@ -25,9 +25,6 @@ export default function SecurityCenter({
               {score} <span className="text-xs font-normal text-neutral-500">/ 100</span>
             </div>
           </div>
-          <span className="text-[10px] mt-2 flex items-center gap-1 font-semibold text-[#51E2F5]">
-            <CheckCircle2 className="h-3 w-3" /> Baseline Met
-          </span>
         </Card>
 
         {[
@@ -58,12 +55,9 @@ export default function SecurityCenter({
       <Card className="p-5 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Vulnerability Audit</h3>
-            <p className="text-xs text-neutral-500">OWASP Top-10 patterns and vulnerable dependencies</p>
+            <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Security Vulnerability Audit</h3>
+            <p className="text-xs text-neutral-500">Identified CVEs, insecure dependencies, and query flaws</p>
           </div>
-          <Badge variant="mauve">
-            STATIC AUDIT
-          </Badge>
         </div>
 
         <div className="space-y-3">

@@ -155,7 +155,7 @@ export function analyzeProjectInput({ projectName, files = [], pomContent = '', 
     isDemoData: false,
     healthScore: {
       overall,
-      status: overall > 80 ? 'EXCELLENT' : overall > 60 ? 'GOOD — IMPROVEMENTS RECOMMENDED' : 'CRITICAL ATTENTION REQUIRED',
+      // status: overall > 80 ? 'EXCELLENT' : overall > 60 ? 'GOOD — IMPROVEMENTS RECOMMENDED' : 'CRITICAL ATTENTION REQUIRED',
       comparison: 'Newly ingested repository assessment',
       breakdown: [
         { category: 'Code Quality', score: qualScore, weight: '25%', status: qualScore > 75 ? 'good' : 'warning' },
@@ -176,20 +176,20 @@ export const TESTBED_PROJECTS = [
   {
     id: 'spring-log4shell-sqli',
     name: 'vulnerable-spring-ecommerce',
-    description: 'Spring Boot application containing Log4Shell (CVE-2021-44228) and SQL Injection in OrderRepository.',
+    description: 'Realistic e-commerce payment service with 3 major project risks: SQL Injection (data theft), Log4Shell (server takeover), and messy fee logic (crash risk).',
     pomContent: `<project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.vulnerable</groupId>
   <artifactId>ecommerce-api</artifactId>
   <version>1.0.0</version>
   <dependencies>
-    <!-- VULNERABLE LOG4J -->
+    <!-- SUPPLY CHAIN RISK 1: Outdated Log4j (Server Takeover Risk) -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.14.1</version>
     </dependency>
-    <!-- VULNERABLE JACKSON -->
+    <!-- SUPPLY CHAIN RISK 2: Outdated Jackson (Deserialization Flaw) -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
@@ -203,19 +203,38 @@ import java.sql.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * REPOSITORY RISK AUDIT: PaymentService.java
+ * Handles online customer account verification and checkout fee calculations.
+ */
 public class PaymentService {
     private static final Logger logger = LogManager.getLogger(PaymentService.class);
 
-    // Known Vulnerability: SQL Injection (CWE-89)
+    /**
+     * RISK 1: DATA THEFT VIA SQL INJECTION (CWE-89)
+     * Glues raw user text into the database query with ' + username + '.
+     * Attackers can type:  ' OR '1'='1  to steal every customer account in the database.
+     */
     public User findAccount(String username, Connection conn) throws SQLException {
-        String query = "SELECT * FROM accounts WHERE user = '" + username + "'"; // VULNERABLE
+        // Unsafe raw text concatenation allows hackers to hijack the SQL query
+        String query = "SELECT * FROM accounts WHERE user = '" + username + "'";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
-        logger.info("Retrieved user: " + username); // Triggers JNDI lookup if untrusted payload
+
+        /**
+         * RISK 2: REMOTE SERVER TAKEOVER VIA LOG4SHELL (CVE-2021-44228)
+         * Untrusted username is sent directly to an outdated Log4j logger.
+         * Hackers can send a malicious payload that commands our server to run their malware.
+         */
+        logger.info("Retrieved user: " + username);
         return new User(rs.getString("id"));
     }
 
-    // High Cyclomatic Complexity (> 15)
+    /**
+     * RISK 3: FRAGILE SPAGHETTI LOGIC (High Cyclomatic Complexity)
+     * 18 tangled if/else branches make this calculation extremely hard to test.
+     * Any change by developers easily causes calculation errors and lost checkouts.
+     */
     public int processTransaction(int amount, int userTier, boolean isVIP, boolean isPromo, int fraudScore) {
         if (amount > 10000) {
             if (!isVIP) {

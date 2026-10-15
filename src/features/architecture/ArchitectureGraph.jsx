@@ -211,9 +211,6 @@ export default function ArchitectureGraph({ onSelectModule, onNavigate, isDarkMo
             <Layers className="h-4 w-4 text-[#51E2F5]" />
             <span className="font-bold text-neutral-900 dark:text-white">Architecture & Dependency Map</span>
           </div>
-          <Badge variant="secondary" className="font-semibold text-[10px]">
-            Minimal Colors Blueprint
-          </Badge>
         </div>
 
         {/* React Flow Viewport - Always high contrast readable */}
@@ -273,7 +270,7 @@ export default function ArchitectureGraph({ onSelectModule, onNavigate, isDarkMo
 
             <div>
               <div className="flex items-center gap-1.5 text-xs font-bold mb-1 text-neutral-900 dark:text-white">
-                <Sparkles className="h-3.5 w-3.5 text-[#51E2F5]" /> Diagnostic Assessment
+                <Layers className="h-3.5 w-3.5 text-[#51E2F5]" /> Component Assessment
               </div>
               <p className="text-xs p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 leading-relaxed text-neutral-800 dark:text-neutral-200">
                 {selectedNode.diagnosis}
@@ -282,7 +279,7 @@ export default function ArchitectureGraph({ onSelectModule, onNavigate, isDarkMo
 
             <div>
               <span className="text-xs font-bold block mb-2 text-neutral-900 dark:text-white">
-                Grounding Signals:
+                Evidence & Findings:
               </span>
               <ul className="space-y-1.5">
                 {selectedNode.ragEvidence.map((ev, i) => (

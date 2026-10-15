@@ -47,7 +47,7 @@ export default function Header({
             {titles[activeTab] || 'Repository Health Check'}
           </h1>
           <p className="text-[11px] sm:text-xs text-[#A28089] truncate hidden xs:block">
-            Diagnostic health scan for software repositories
+            Code risk and vulnerability inspection
           </p>
         </div>
       </div>

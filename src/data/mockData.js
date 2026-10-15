@@ -1,13 +1,13 @@
 export const PIPELINE_STAGES = [
-  { id: '01', name: 'Project Ingestion', desc: 'Parsing repo manifest & AST extraction' },
-  { id: '02', name: 'Repo Preprocessing', desc: 'File tokenization & build tool index' },
-  { id: '03', name: 'Static Code Analysis', desc: 'AST metrics, cyclomatic hotspots' },
-  { id: '04', name: 'Structure Analysis', desc: 'Module coupling & call-graph analysis' },
-  { id: '05', name: 'Security Analysis', desc: 'OWASP Top-10 & CVE dependency check' },
-  { id: '06', name: 'Metrics & Tech Debt', desc: 'Quantifying remediation hours' },
-  { id: '07', name: 'AI Diagnosis (RAG)', desc: 'Gemini reasoning over retrieved context' },
-  { id: '08', name: 'Software Health Score', desc: 'Multi-pillar weighted scoring' },
-  { id: '09', name: 'MRI Report Gen', desc: 'Diagnostic blueprint synthesis' }
+  { id: '01', name: 'Project Ingestion', desc: 'Parsing repository manifest & code files' },
+  { id: '02', name: 'Code Preprocessing', desc: 'Tokenizing files and indexing build tools' },
+  { id: '03', name: 'Static Analysis', desc: 'Measuring complexity and code hotspots' },
+  { id: '04', name: 'System Structure', desc: 'Mapping component connections and call graphs' },
+  { id: '05', name: 'Security Audit', desc: 'Checking known vulnerabilities and CVEs' },
+  { id: '06', name: 'Technical Debt', desc: 'Estimating hours required for remediation' },
+  { id: '07', name: 'Code Risk Diagnosis', desc: 'Analyzing root causes and failure points' },
+  { id: '08', name: 'Health Scoring', desc: 'Calculating overall software risk score' },
+  { id: '09', name: 'Summary & Export', desc: 'Exporting audit findings and fixes' }
 ];
 
 export const REPO_SNAPSHOT = {
@@ -25,7 +25,7 @@ export const REPO_SNAPSHOT = {
 
 export const HEALTH_SCORE = {
   overall: 78,
-  status: 'GOOD — IMPROVEMENTS RECOMMENDED',
+  // status: 'GOOD — IMPROVEMENTS RECOMMENDED',
   comparison: '+4 pts from previous scan (v2.4.1)',
   breakdown: [
     { category: 'Code Quality', score: 82, weight: '25%', status: 'good' },
@@ -49,17 +49,17 @@ export const MODULE_DATA = [
     loc: 1420,
     techDebt: '24h',
     ragEvidence: [
-      'AST Cyclomatic Complexity exceeds threshold (18 > 15).',
-      'Afferent/Efferent coupling ratio 0.72 indicates tight cohesion failure.',
-      'Log4j v2.14.1 transitive vulnerability mapped to transaction dispatch.',
-      '7 consumer services depend directly on un-abstracted persistence entities.'
+      'Fee calculation logic has 18 tangled decision branches (recommended: fewer than 10).',
+      '7 other services call this file directly with no safety buffer or fallback.',
+      'Uses outdated Log4j (v2.14.1) which enables remote server takeover.',
+      'Database query glues user input directly into SQL text without parameter protection.'
     ],
-    diagnosis: 'PaymentService is a high-risk module due to elevated cyclomatic complexity, strong coupling with OrderService, and an associated dependency vulnerability. The combination increases maintenance and cascade failure risk.',
+    diagnosis: 'PaymentService is the highest-risk file in the project. It handles money and account verification, but contains a data theft vulnerability (SQL Injection), a server takeover vulnerability (Log4Shell), and brittle fee calculation logic that can fail under heavy checkout volume.',
     actions: [
-      'Extract validateTransaction() into dedicated domain validator.',
-      'Decouple direct dependency from OrderService using event-driven pub/sub.',
-      'Patch Log4j dependency to version >= 2.17.1.',
-      'Add targeted unit tests for payment fallback pipelines.'
+      'Separate fee calculation into clean, independent calculation rules.',
+      'Protect the Order service with an asynchronous queue so payment hiccups do not freeze the store.',
+      'Upgrade the Log4j library to version 2.17.1 or higher immediately.',
+      'Use secure prepared database statements to block data theft.'
     ]
   },
   {
@@ -74,13 +74,13 @@ export const MODULE_DATA = [
     loc: 890,
     techDebt: '16h',
     ragEvidence: [
-      'Controller contains direct business logic and synchronous DB queries.',
-      'Coupling with 5 microservices without circuit breaker fallback.'
+      'Mixes cart management, order submission, and database queries in one place.',
+      'Directly calls 5 other services without an automatic safety timeout or fallback.'
     ],
-    diagnosis: 'Violates Single Responsibility Principle. High blast radius if PaymentService or InventoryService stalls.',
+    diagnosis: 'OrderController handles too many unrelated tasks at once. If PaymentService or Inventory slows down, OrderController locks up and the entire store checkout freezes.',
     actions: [
-      'Introduce Command/Query Responsibility Segregation (CQRS).',
-      'Move validation logic to middleware request validators.'
+      'Add a safety circuit breaker so slow payment gateways do not freeze customer checkouts.',
+      'Separate cart order processing from database search operations.'
     ]
   },
   {
@@ -95,12 +95,12 @@ export const MODULE_DATA = [
     loc: 620,
     techDebt: '9h',
     ragEvidence: [
-      'Unparameterized SQL string concat pattern flagged in findByCustomFilter().',
-      'High reuse across authentication and billing services.'
+      'Search filters concatenate raw user text directly into database commands.',
+      'Heavily called by both customer login and billing services.'
     ],
-    diagnosis: 'Potential SQL Injection vector under high reuse conditions.',
+    diagnosis: 'Data theft vulnerability (SQL Injection). A malicious user can type database commands into user search fields to view passwords or user profiles.',
     actions: [
-      'Refactor native query into Spring Data JPA CriteriaBuilder parameterization.'
+      'Use secure parameter binding (:filterParam) instead of gluing text into queries.'
     ]
   },
   {
@@ -230,7 +230,7 @@ export const SECURITY_METRICS = {
       severity: 'CRITICAL',
       title: 'Remote Code Execution (Log4j JNDI Lookup)',
       cve: 'CVE-2021-44228',
-      reason: 'Vulnerable transitive dependency imported via payment audit logging framework.',
+      reason: 'Outdated Log4j library enables remote hackers to run malicious code and take over the server.',
       action: 'Upgrade log4j-core to 2.17.1 or higher immediately.'
     },
     {
@@ -239,7 +239,7 @@ export const SECURITY_METRICS = {
       severity: 'HIGH',
       title: 'Potential SQL Injection via Native Query String Concat',
       cve: 'CWE-89',
-      reason: 'Raw user input is concatenated directly inside findByCustomFilter() method.',
+      reason: 'User input is glued directly into database queries, allowing attackers to extract passwords and user records.',
       action: 'Replace raw concatenation with JPA parameter binding (:filterParam).'
     },
     {
@@ -248,7 +248,7 @@ export const SECURITY_METRICS = {
       severity: 'HIGH',
       title: 'Missing Circuit Breaker & Rate Limiter',
       cve: 'CWE-400',
-      reason: 'Direct synchronous calls to external payment gateway lack timeout fallbacks.',
+      reason: 'Store orders call payment processing directly without a timeout safety net, risking full checkout freezes.',
       action: 'Implement Resilience4j circuit breaker and retry policies.'
     }
   ]

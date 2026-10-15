@@ -76,7 +76,7 @@ export default function Dependencies({ dependencies = DEPENDENCY_LIST, isDarkMod
                         : 'bg-[#51E2F5]/15 text-[#51E2F5] border-[#51E2F5]/40'
                     }`}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5" />
                     {item.value}
                   </span>
                 </div>
@@ -85,10 +85,6 @@ export default function Dependencies({ dependencies = DEPENDENCY_LIST, isDarkMod
                   {item.value}
                 </div>
               )}
-              
-              <span className="text-[11px] text-neutral-400 dark:text-neutral-500 block">
-                {item.sub}
-              </span>
             </Card>
           );
         })}

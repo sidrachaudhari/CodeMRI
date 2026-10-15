@@ -34,12 +34,9 @@ export default function AIDiagnosis({
             <h2 className="text-sm font-bold text-neutral-900 dark:text-white">Diagnostic Code Review</h2>
           </div>
           <p className="text-xs mt-0.5 text-neutral-500">
-            Deterministic code audit connecting AST metrics, architecture dependencies, and security findings
+            Inspection of code vulnerabilities, architectural risks, and business impacts
           </p>
         </div>
-        <Badge variant="mauve" className="self-start sm:self-auto shrink-0">
-          Evidence-Backed Audit
-        </Badge>
       </Card>
 
       {/* Module Selector tabs */}
@@ -73,9 +70,9 @@ export default function AIDiagnosis({
                 <h3 className="text-base font-bold font-mono text-neutral-900 dark:text-white">{current.name}</h3>
                 <span className="text-xs text-neutral-500">{current.category}</span>
               </div>
-              <Badge variant={current.riskScore > 80 ? 'coral' : 'secondary'}>
-                Risk Score: {current.riskScore} / 100
-              </Badge>
+              <span className={`text-xs font-mono font-bold ${current.riskScore > 80 ? 'text-[#FFA8B6]' : 'text-neutral-500'}`}>
+                Risk Score: {current.riskScore}/100
+              </span>
             </div>
 
             {/* Plain English Finding */}
@@ -87,10 +84,10 @@ export default function AIDiagnosis({
             {/* Why This Matters (Human impact on system) */}
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider mb-2 text-neutral-900 dark:text-white">
-                Why This Matters in Production
+                Why This Matters to the Project
               </h4>
               <div className="p-3.5 border rounded-xl text-xs leading-relaxed bg-neutral-100/70 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200">
-                This file has a cyclomatic complexity of <strong className="text-neutral-900 dark:text-white">{current.complexity}</strong> and is directly called by <strong className="text-neutral-900 dark:text-white">{current.dependents} other services</strong> without an abstraction boundary. Any regression or failure here has a high blast radius and will directly impact downstream checkout and user flows.
+                This file has <strong className="text-neutral-900 dark:text-white">{current.complexity} tangled logic branches</strong> and is called directly by <strong className="text-neutral-900 dark:text-white">{current.dependents} other services</strong> without an isolation buffer. If a bug or crash occurs here, it immediately brings down customer checkout and storefront operations.
               </div>
             </div>
 
@@ -118,8 +115,8 @@ export default function AIDiagnosis({
                 onClick={handleGeneratePlan}
                 disabled={isGenerating}
               >
-                <Sparkles className="h-4 w-4 mr-2" />
-                {isGenerating ? 'Preparing Step-by-Step Refactor...' : 'Generate Step-by-Step Refactor'}
+                <FileText className="h-4 w-4 mr-2" />
+                {isGenerating ? 'Loading Action Steps...' : 'View Remediation Steps'}
               </Button>
 
               {planGenerated && (
@@ -148,12 +145,11 @@ export default function AIDiagnosis({
         {/* Explainability / Evidence Panel */}
         <Card className="p-5 space-y-4 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
           <div>
-            <span className="text-xs uppercase tracking-wider font-semibold block text-neutral-500">Audit Evidence</span>
-            <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Signals Audited</h3>
+            <h3 className="text-sm font-bold text-neutral-900 dark:text-white">Risk Evidence</h3>
+            <p className="text-xs text-neutral-500 mt-0.5">
+              Verified against code structure, database queries, and package dependencies.
+            </p>
           </div>
-          <p className="text-xs leading-relaxed text-neutral-500">
-            Every finding is directly verified against deterministic AST static metrics and dependency manifests.
-          </p>
 
           <div className="space-y-2.5 pt-2">
             {current.ragEvidence.map((ev, i) => (
