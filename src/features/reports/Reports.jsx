@@ -1,8 +1,9 @@
-import React from 'react';
-import { FileCode2, FileText, Printer, FileDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FileCode2, FileText, Printer, FileDown, Database, RefreshCw } from 'lucide-react';
 import { Card } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
+import { fetchSavedScans } from '../../lib/neonClient';
 
 export default function Reports({
   repoSnapshot,
@@ -11,6 +12,19 @@ export default function Reports({
   hotspots = [],
   isDarkMode = true
 }) {
+  const [neonScans, setNeonScans] = useState([]);
+  const [isLoadingScans, setIsLoadingScans] = useState(false);
+
+  const loadCloudScans = async () => {
+    setIsLoadingScans(true);
+    const scans = await fetchSavedScans();
+    setNeonScans(scans);
+    setIsLoadingScans(false);
+  };
+
+  useEffect(() => {
+    loadCloudScans();
+  }, []);
   // 1. Generate real printable PDF via clean print window
   const handlePrintPDF = () => {
     const printWindow = window.open('', '_blank', 'width=900,height=800');
@@ -263,6 +277,87 @@ ${findings.map(f => `### [${f.severity}] ${f.title} (${f.cve || 'Hotspot'})
               ))}
             </div>
           </div>
+        </div>
+      </Card>
+
+      {/* Neon Cloud Scans Persistent History */}
+      <Card className="p-6 border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+        <div className="flex items-center justify-between pb-4 border-b border-neutral-200 dark:border-neutral-800">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl border border-[#51E2F5]/30 bg-[#51E2F5]/10 text-[#51E2F5]">
+              <Database className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+                Neon Postgres Scan History
+                <Badge variant="outline" className="text-[10px] text-emerald-400 border-emerald-400/30">
+                  Production Branch
+                </Badge>
+              </h3>
+              <p className="text-[11px] text-neutral-500">
+                Diagnostic runs automatically synced to Neon Lakebase Postgres
+              </p>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={loadCloudScans}
+            disabled={isLoadingScans}
+            className="text-xs gap-1.5"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isLoadingScans ? 'animate-spin' : ''}`} />
+            Sync Neon
+          </Button>
+        </div>
+
+        <div className="mt-4">
+          {neonScans.length === 0 ? (
+            <div className="text-center py-6 text-xs text-neutral-500">
+              No scans found in Neon Postgres. Run a scan to persist it to the cloud.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-neutral-200 dark:border-neutral-800 text-neutral-500">
+                    <th className="py-2 px-3 font-semibold">ID</th>
+                    <th className="py-2 px-3 font-semibold">Project</th>
+                    <th className="py-2 px-3 font-semibold">Health Score</th>
+                    <th className="py-2 px-3 font-semibold">Tech Debt</th>
+                    <th className="py-2 px-3 font-semibold">Saved At</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 font-mono">
+                  {neonScans.map((scan) => (
+                    <tr key={scan.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50">
+                      <td className="py-2 px-3 text-[#51E2F5]">#{scan.id}</td>
+                      <td className="py-2 px-3 font-sans font-medium text-neutral-900 dark:text-white">
+                        {scan.project_name}
+                      </td>
+                      <td className="py-2 px-3 font-bold">
+                        <span
+                          className={
+                            scan.health_score >= 80
+                              ? 'text-emerald-400'
+                              : scan.health_score >= 60
+                              ? 'text-amber-400'
+                              : 'text-rose-400'
+                          }
+                        >
+                          {scan.health_score} / 100
+                        </span>
+                      </td>
+                      <td className="py-2 px-3 text-neutral-400">{scan.tech_debt_hours}h</td>
+                      <td className="py-2 px-3 text-neutral-500 text-[11px]">
+                        {new Date(scan.created_at).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </Card>
     </div>

@@ -13,6 +13,7 @@ import Reports from './src/features/reports/Reports';
 import ProjectIngestionModal from './src/features/ingestion/ProjectIngestionModal';
 import { PIPELINE_STAGES, MODULE_DATA, REPO_SNAPSHOT, HEALTH_SCORE, SECURITY_METRICS, DEPENDENCY_LIST } from './src/data/mockData';
 import { analyzeProjectInput } from './src/data/scanner';
+import { persistScanToNeon } from './src/lib/neonClient';
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -83,6 +84,18 @@ export default function App() {
     if (scanResults.dependencies.length > 0) {
       setCurrentDependencies(scanResults.dependencies);
     }
+
+    persistScanToNeon({
+      projectName: scanResults.projectName,
+      language: scanResults.language,
+      buildTool: scanResults.buildTool,
+      filesAnalyzed: scanResults.filesAnalyzed,
+      loc: scanResults.loc,
+      healthScore: scanResults.healthScore,
+      techDebtHours: scanResults.techDebtHours,
+      issuesDetected: scanResults.issuesDetected,
+      findings: scanResults.findings
+    });
 
     runFullScan();
   };

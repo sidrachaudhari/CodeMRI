@@ -1,6 +1,7 @@
-import React from 'react';
-import { Play, RotateCcw, FolderPlus, Sun, Moon, Menu } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Play, RotateCcw, FolderPlus, Sun, Moon, Menu, Database } from 'lucide-react';
 import { Button } from '../ui/button';
+import { fetchNeonHealth } from '../../lib/neonClient';
 
 export default function Header({
   activeTab,
@@ -11,6 +12,16 @@ export default function Header({
   onToggleTheme,
   onOpenMobileMenu
 }) {
+  const [neonStatus, setNeonStatus] = useState({ status: 'checking', branch: 'production' });
+
+  useEffect(() => {
+    fetchNeonHealth().then(setNeonStatus);
+    const interval = setInterval(() => {
+      fetchNeonHealth().then(setNeonStatus);
+    }, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
   const titles = {
     overview: 'Repository Health & Executive Summary',
     quality: 'Code Quality, Smells & Technical Debt',
@@ -54,6 +65,36 @@ export default function Header({
 
       {/* Right: Actions */}
       <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        {/* Neon Postgres Connection Badge */}
+        <div
+          className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-lg border text-xs font-mono transition-colors border-[#51E2F5]/30 bg-[#51E2F5]/5 text-neutral-700 dark:text-neutral-300"
+          title={
+            neonStatus.database
+              ? `Connected to ${neonStatus.database} (${neonStatus.branch}) - Latency: ${neonStatus.latencyMs}ms, Total Scans: ${neonStatus.totalScans}`
+              : 'Connecting to Neon Postgres...'
+          }
+        >
+          <Database className="h-3.5 w-3.5 text-[#51E2F5]" />
+          <span className="flex h-2 w-2 relative">
+            <span
+              className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
+                neonStatus.status === 'connected' ? 'bg-emerald-400 opacity-75' : 'bg-amber-400 opacity-75'
+              }`}
+            ></span>
+            <span
+              className={`relative inline-flex rounded-full h-2 w-2 ${
+                neonStatus.status === 'connected' ? 'bg-emerald-500' : 'bg-amber-500'
+              }`}
+            ></span>
+          </span>
+          <span className="hidden lg:inline text-[11px] font-semibold text-neutral-300">Neon:</span>
+          <span className="text-[11px] text-[#51E2F5] font-bold">
+            {neonStatus.status === 'connected'
+              ? `${neonStatus.branch} (${neonStatus.latencyMs}ms)`
+              : 'Connecting...'}
+          </span>
+        </div>
+
         {/* Theme Toggle */}
         <Button
           variant="outline"
@@ -98,13 +139,12 @@ export default function Header({
           {isScanning ? (
             <>
               <RotateCcw className="h-3.5 w-3.5 animate-spin" />
-              <span className="hidden xs:inline">Scanning...</span>
+              <span>Scanning...</span>
             </>
           ) : (
             <>
               <Play className="h-3.5 w-3.5 fill-current" />
-              <span className="hidden sm:inline">Run Full Scan</span>
-              <span className="sm:hidden">Scan</span>
+              <span className="hidden sm:inline">Run Scan</span>
             </>
           )}
         </Button>

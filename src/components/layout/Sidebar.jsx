@@ -134,11 +134,19 @@ export default function Sidebar({
           </div>
 
           {isHovered && (
-            <div className={`pt-2 mt-2 border-t flex items-center justify-between text-xs ${isDarkMode ? 'border-neutral-800' : 'border-neutral-200'}`}>
-              <span className="text-[10px] text-[#A28089]">STATUS</span>
-              <span className="text-[10px] font-bold text-[#51E2F5] flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" /> Ready
-              </span>
+            <div className={`pt-2 mt-2 border-t flex flex-col gap-1 text-xs ${isDarkMode ? 'border-neutral-800' : 'border-neutral-200'}`}>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-[#A28089]">STATUS</span>
+                <span className="text-[10px] font-bold text-[#51E2F5] flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" /> Ready
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-[#A28089]">NEON DB</span>
+                <span className="text-[10px] font-mono text-emerald-400 font-semibold">
+                  production
+                </span>
+              </div>
             </div>
           )}
         </div>
