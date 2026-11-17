@@ -105,27 +105,43 @@ export const LLM_PROVIDERS = [
 
 export const EXTERNAL_LLM_TARGETS = [
   {
-    id: 'gemini-web',
-    name: 'Gemini',
-    buildUrl: () => 'https://gemini.google.com/app',
-    autoFillsPrompt: false,
-  },
-  {
     id: 'chatgpt-web',
     name: 'ChatGPT',
+    provider: 'OpenAI',
+    description: 'Opens ChatGPT with your problem prompt pre-filled',
     buildUrl: (prompt) => `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`,
     autoFillsPrompt: true,
   },
   {
     id: 'claude-web',
     name: 'Claude',
+    provider: 'Anthropic',
+    description: 'Opens Claude with your problem prompt pre-filled',
     buildUrl: (prompt) => `https://claude.ai/new?q=${encodeURIComponent(prompt)}`,
     autoFillsPrompt: true,
   },
   {
+    id: 'gemini-web',
+    name: 'Google Gemini',
+    provider: 'Google',
+    description: 'Copies your problem prompt & opens Gemini (paste with Ctrl+V)',
+    buildUrl: () => 'https://gemini.google.com/app',
+    autoFillsPrompt: false,
+  },
+  {
     id: 'perplexity-web',
     name: 'Perplexity',
+    provider: 'Perplexity AI',
+    description: 'Opens Perplexity with your problem prompt pre-filled',
     buildUrl: (prompt) => `https://www.perplexity.ai/search?q=${encodeURIComponent(prompt)}`,
+    autoFillsPrompt: true,
+  },
+  {
+    id: 'grok-web',
+    name: 'Grok',
+    provider: 'xAI',
+    description: 'Opens Grok with your problem prompt pre-filled',
+    buildUrl: (prompt) => `https://grok.com/?q=${encodeURIComponent(prompt)}`,
     autoFillsPrompt: true,
   },
 ];
@@ -280,9 +296,9 @@ async function executeDirectlyInBrowser(payload) {
 
   const messages = Array.isArray(payload.messages) && payload.messages.length > 0
     ? payload.messages.map((m) => ({
-        role: m.role === 'assistant' ? 'assistant' : 'user',
-        content: String(m.content || '').trim(),
-      }))
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: String(m.content || '').trim(),
+    }))
     : [{ role: 'user', content: String(payload.prompt || '').trim() }];
 
   if (provider !== 'ollama' && provider !== 'custom' && !apiKey) {
@@ -446,8 +462,8 @@ async function executeDirectlyInBrowser(payload) {
   if (!res.ok) {
     throw new Error(
       data?.error?.message ||
-        (typeof data?.error === 'string' ? data.error : null) ||
-        `${providerMeta.name} API error (HTTP ${res.status})`
+      (typeof data?.error === 'string' ? data.error : null) ||
+      `${providerMeta.name} API error (HTTP ${res.status})`
     );
   }
   const text = data?.choices?.[0]?.message?.content?.trim() || '';
