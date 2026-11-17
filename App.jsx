@@ -196,7 +196,12 @@ export default function App() {
           )}
 
           {activeTab === 'roadmap' && (
-            <RefactoringRoadmap isDarkMode={isDarkMode} />
+            <RefactoringRoadmap
+              repoSnapshot={currentRepo}
+              modules={currentHotspots}
+              findings={currentFindings}
+              isDarkMode={isDarkMode}
+            />
           )}
 
           {activeTab === 'reports' && (

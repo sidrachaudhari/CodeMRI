@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { getDbHealth, saveScan, getScans } from './server/neonDb.js';
+import { getLlmProviderStatus, executeLlmPrompt } from './server/llmService.js';
 
 function neonApiPlugin() {
   const setupApiMiddleware = (server) => {
@@ -48,6 +49,40 @@ function neonApiPlugin() {
           } catch (error) {
             res.setHeader('Content-Type', 'application/json');
             res.statusCode = 500;
+            return res.end(JSON.stringify({ error: error.message }));
+          }
+        });
+        return;
+      }
+
+      if (url.pathname === '/api/llm/providers' && req.method === 'GET') {
+        try {
+          const status = getLlmProviderStatus();
+          res.setHeader('Content-Type', 'application/json');
+          res.statusCode = 200;
+          return res.end(JSON.stringify(status));
+        } catch (error) {
+          res.setHeader('Content-Type', 'application/json');
+          res.statusCode = 500;
+          return res.end(JSON.stringify({ error: error.message }));
+        }
+      }
+
+      if (url.pathname === '/api/llm/execute' && req.method === 'POST') {
+        let body = '';
+        req.on('data', (chunk) => {
+          body += chunk;
+        });
+        req.on('end', async () => {
+          try {
+            const payload = JSON.parse(body || '{}');
+            const result = await executeLlmPrompt(payload);
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode = 200;
+            return res.end(JSON.stringify(result));
+          } catch (error) {
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode = 400;
             return res.end(JSON.stringify({ error: error.message }));
           }
         });
