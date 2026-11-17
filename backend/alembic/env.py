@@ -1,23 +1,24 @@
 
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from app.models import Base
-
-
 # --------------------------------------------------
-# 1. Load environment variables
+# 1. Locate backend and configure sys.path
 # --------------------------------------------------
 
-# Locate the backend directory
 BACKEND_DIR = Path(__file__).resolve().parents[1]
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
 
 # Load backend/.env
 load_dotenv(BACKEND_DIR / ".env")
+
+from app.models import Base
 
 
 # --------------------------------------------------
@@ -47,7 +48,7 @@ config.set_main_option(
 
 
 # --------------------------------------------------
-# 4. Register SQLAlchemy metadata
+# 4. Register SQLAlchemy metadata and filters
 # --------------------------------------------------
 
 target_metadata = Base.metadata
@@ -81,6 +82,7 @@ def run_migrations_offline():
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
         compare_type=True,
+        include_object=include_object,
     )
 
     with context.begin_transaction():
@@ -105,6 +107,7 @@ def run_migrations_online():
             connection=connection,
             target_metadata=target_metadata,
             compare_type=True,
+            include_object=include_object,
         )
 
         with context.begin_transaction():

@@ -1,43 +1,44 @@
-
-import os
-
-from dotenv import load_dotenv
+import logging
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from app.core.config import settings
 
-# Load environment variables from backend/.env
-load_dotenv()
+logger = logging.getLogger(__name__)
 
-# Read the Neon database connection string
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Validate that DATABASE_URL is configured
+if not settings.DATABASE_URL or "placeholder" in settings.DATABASE_URL:
+    logger.warning("DATABASE_URL is not configured or using placeholder value.")
 
-if not DATABASE_URL:
-    raise ValueError(
-        "DATABASE_URL is missing. Check your backend/.env file."
-    )
-
-# Create SQLAlchemy engine
+# Create a single centralized engine instance
 engine = create_engine(
-    DATABASE_URL,
+    settings.DATABASE_URL,
     pool_pre_ping=True,
-    pool_size=5,
-    max_overflow=10
+    pool_size=settings.DB_POOL_SIZE,
+    max_overflow=settings.DB_MAX_OVERFLOW,
+    pool_timeout=settings.DB_POOL_TIMEOUT,
+    pool_recycle=settings.DB_POOL_RECYCLE,
 )
 
-# Create database session factory
+# Create session factory
 SessionLocal = sessionmaker(
     bind=engine,
     autoflush=False,
     autocommit=False,
-    expire_on_commit=False
+    expire_on_commit=False,
 )
 
 
-# Dependency for FastAPI routes
 def get_db():
-    db = SessionLocal()
-
+    """
+    FastAPI dependency that yields a database session per request.
+    Automatically rolls back on unhandled exceptions and closes
+    the session when request processing completes.
+    """
+    db: Session = SessionLocal()
     try:
         yield db
+    except Exception:
+        db.rollback()
+        raise
     finally:
         db.close()
