@@ -221,6 +221,7 @@ export default function LlmExecutionModal({
 
   const autoTriggeredRef = useRef(false);
   const scrollBottomRef = useRef(null);
+  const apiKeyInputRef = useRef(null);
 
   const providerConfig = useMemo(
     () => LLM_PROVIDERS.find((p) => p.id === provider) || LLM_PROVIDERS[0],
@@ -369,6 +370,14 @@ export default function LlmExecutionModal({
 
   const handleRunInitial = () => {
     if (!promptText.trim()) return;
+    if (providerConfig.requiresApiKey && !hasServerKey && !activeApiKey.trim()) {
+      setIsConfigExpanded(true);
+      setErrorMsg(
+        `Please paste your ${providerConfig.name} API key above (or click "Get key →" for a free key), or use one of the external LLM buttons (Gemini / ChatGPT / Claude) at the top.`
+      );
+      setTimeout(() => apiKeyInputRef.current?.focus(), 50);
+      return;
+    }
     setIsConfigExpanded(false);
     runExecution([{ role: 'user', content: promptText.trim() }]);
   };
@@ -653,6 +662,7 @@ export default function LlmExecutionModal({
                       </div>
                       <div className="relative">
                         <input
+                          ref={apiKeyInputRef}
                           type={showApiKey ? 'text' : 'password'}
                           value={activeApiKey}
                           onChange={(e) =>
